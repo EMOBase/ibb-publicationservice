@@ -2,18 +2,11 @@ package ibb.api;
 
 import java.util.List;
 
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestQuery;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import io.quarkus.hibernate.reactive.panache.Panache;
-import io.smallrye.mutiny.CompositeException;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.http.HttpServerRequest;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,24 +18,15 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.container.ContainerRequestFilter;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.ext.ExceptionMapper;
-import jakarta.ws.rs.ext.Provider;
 
 @Path("/publications")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PublicationResource {
-
-    private static final Logger LOGGER = Logger.getLogger(PublicationResource.class.getName());
 
     @GET
     @Path("{id}")
@@ -119,57 +103,5 @@ public class PublicationResource {
             )
             .onItem().ifNotNull().transform(entity -> Response.ok().build())
             .onItem().ifNull().continueWith(Response.ok().status(Status.NOT_FOUND)::build);
-    }
-
-    @Provider
-    public static class ErrorMapper implements ExceptionMapper<Exception> {
-        @Inject
-        ObjectMapper objectMapper;
-
-        @Override
-        public Response toResponse(Exception exception) {
-            LOGGER.error("Failed to handle request", exception);
-
-            Throwable throwable = exception;
-            int code = 500;
-            if (throwable instanceof WebApplicationException) {
-                code = ((WebApplicationException) exception).getResponse().getStatus();
-            }
-
-            if (throwable instanceof CompositeException) {
-                throwable = ((CompositeException) throwable).getCause();
-            }
-
-            ObjectNode exceptionJson = objectMapper.createObjectNode();
-            exceptionJson.put("exceptionType", throwable.getClass().getName());
-            exceptionJson.put("code", code);
-            if (exception.getMessage() != null) {
-                exceptionJson.put("error", throwable.getMessage());
-            }
-
-            return Response.status(code)
-                .entity(exceptionJson)
-                .build();
-        }
-    }
-
-    @Provider
-    public static class LoggingFilter implements ContainerRequestFilter {
-        private static final Logger LOGGER = Logger.getLogger(LoggingFilter.class);
-
-        @Context
-        UriInfo info;
-
-        @Context
-        HttpServerRequest request;
-
-        @Override
-        public void filter(ContainerRequestContext context) {
-            final String method = context.getMethod();
-            final String path = info.getPath();
-            final String address = request.remoteAddress().toString();
-    
-            LOGGER.infof("Request %s %s from IP %s", method, path, address);
-        }
     }
 }

@@ -6,6 +6,7 @@ import java.time.Year;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.hibernate.Length;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -50,9 +51,14 @@ public class Publication extends PanacheEntityBase {
     @GeneratedValue
     public Long id;
 
-    @NotBlank
-    @Pattern(regexp = "^10.\\d+/[-._;()/:a-zA-Z0-9]+$")
+    // @NaturalId
+    @NotBlank(message = "Doi must not be blank")
+    @Pattern(regexp = "^10.\\d+/[-._;()/:a-zA-Z0-9]+$", message = "Doi must be in valid format")
     public String doi;
+    // public void setDoi(
+    //     String doi) {
+    //     this.doi = doi.toLowerCase();
+    // }
 
     @ElementCollection(fetch = FetchType.LAZY)
     @NotNull(groups = ValidationGroups.Post.class)
@@ -60,25 +66,25 @@ public class Publication extends PanacheEntityBase {
 
     public Long pmid;
 
-    @NotBlank
+    @NotBlank(message = "First author must not be blank")
     public String firstAuthor;
 
-    @NotBlank
+    @NotBlank(message = "Title must not be blank")
     @Column(length = Length.LONG)
     public String title;
 
-    @NotBlank
+    @NotBlank(message = "Abstract must not be blank")
     @Column(length = Length.LONG)
     @JsonProperty("abstract")
     public String summary;
 
-    @NotBlank
+    @NotBlank(message = "Reference must not be blank")
     @Column(length = Length.LONG)
     public String reference;
 
     public String journal;
 
-    @PastOrPresent
+    @PastOrPresent(message = "Year must be in the past or in the present")
     @Schema(implementation = Integer.class)
     public Year year;
 
@@ -89,10 +95,6 @@ public class Publication extends PanacheEntityBase {
     @UpdateTimestamp
     @Schema(implementation = Long.class)
     public Instant updatedAt;
-
-    public void setDoi(String doi) {
-        this.doi = doi.toLowerCase();
-    }
 
     public static Uni<List<Publication>> findByGene(String gene) {
         return list("#Publication.findByGene", gene);
