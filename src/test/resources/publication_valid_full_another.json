@@ -1,41 +1,140 @@
 {
-    "genes": ["TC003418"],
-    "pmid": 26215380,
+    "gene": "TC003418",
+    "pmid": "26215380",
     "doi": "10.1038/ncomms8822",
     "authors": [
-        "Christian Schmitt-Engel",
-        "Dorothea Schultheis",
-        "Jonas Schwirz",
-        "Nadi Ströhlein",
-        "Nicole Troelenberg",
-        "Upalparna Majumdar",
-        "Van Anh Dao",
-        "Daniela Grossmann",
-        "Tobias Richter",
-        "Maike Tech",
-        "Jürgen Dönitz",
-        "Lizzy Gerischer",
-        "Mirko Theis",
-        "Inga Schild",
-        "Jochen Trauner",
-        "Nikolaus D B Koniszewski",
-        "Elke Küster",
-        "Sebastian Kittelmann",
-        "Yonggang Hu",
-        "Sabrina Lehmann",
-        "Janna Siemanowski",
-        "Julia Ulrich",
-        "Kristen A Panfilio",
-        "Reinhard Schröder",
-        "Burkhard Morgenstern",
-        "Mario Stanke",
-        "Frank Buchhholz",
-        "Manfred Frasch",
-        "Siegfried Roth",
-        "Ernst A Wimmer",
-        "Michael Schoppmeier",
-        "Martin Klingler",
-        "Gregor Bucher"
+        {
+            "firstName": "Christian",
+            "lastName": "Schmitt-Engel"
+        },
+        {
+            "firstName": "Dorothea",
+            "lastName": "Schultheis"
+        },
+        {
+            "firstName": "Jonas",
+            "lastName": "Schwirz"
+        },
+        {
+            "firstName": "Nadi",
+            "lastName": "Ströhlein"
+        },
+        {
+            "firstName": "Nicole",
+            "lastName": "Troelenberg"
+        },
+        {
+            "firstName": "Upalparna",
+            "lastName": "Majumdar"
+        },
+        {
+            "firstName": "Van Anh",
+            "lastName": "Dao"
+        },
+        {
+            "firstName": "Daniela",
+            "lastName": "Grossmann"
+        },
+        {
+            "firstName": "Tobias",
+            "lastName": "Richter"
+        },
+        {
+            "firstName": "Maike",
+            "lastName": "Tech"
+        },
+        {
+            "firstName": "Jürgen",
+            "lastName": "Dönitz"
+        },
+        {
+            "firstName": "Lizzy",
+            "lastName": "Gerischer"
+        },
+        {
+            "firstName": "Mirko",
+            "lastName": "Theis"
+        },
+        {
+            "firstName": "Inga",
+            "lastName": "Schild"
+        },
+        {
+            "firstName": "Jochen",
+            "lastName": "Trauner"
+        },
+        {
+            "firstName": "Nikolaus D B",
+            "lastName": "Koniszewski"
+        },
+        {
+            "firstName": "Elke",
+            "lastName": "Küster"
+        },
+        {
+            "firstName": "Sebastian",
+            "lastName": "Kittelmann"
+        },
+        {
+            "firstName": "Yonggang",
+            "lastName": "Hu"
+        },
+        {
+            "firstName": "Sabrina",
+            "lastName": "Lehmann"
+        },
+        {
+            "firstName": "Janna",
+            "lastName": "Siemanowski"
+        },
+        {
+            "firstName": "Julia",
+            "lastName": "Ulrich"
+        },
+        {
+            "firstName": "Kristen A",
+            "lastName": "Panfilio"
+        },
+        {
+            "firstName": "Reinhard",
+            "lastName": "Schröder"
+        },
+        {
+            "firstName": "Burkhard",
+            "lastName": "Morgenstern"
+        },
+        {
+            "firstName": "Mario",
+            "lastName": "Stanke"
+        },
+        {
+            "firstName": "Frank",
+            "lastName": "Buchhholz"
+        },
+        {
+            "firstName": "Manfred",
+            "lastName": "Frasch"
+        },
+        {
+            "firstName": "Siegfried",
+            "lastName": "Roth"
+        },
+        {
+            "firstName": "Ernst A",
+            "lastName": "Wimmer"
+        },
+        {
+            "firstName": "Michael",
+            "lastName": "Schoppmeier"
+        },
+        {
+            "firstName": "Martin",
+            "lastName": "Klingler"
+        },
+        {
+            "firstName": "Gregor",
+            "lastName": "Bucher"
+        }
     ],
     "title": "The iBeetle large-scale RNAi screen reveals gene functions for insect development and physiology.",
     "abstract": "Genetic screens are powerful tools to identify the genes required for a given biological process. However, for technical reasons, comprehensive screens have been restricted to very few model organisms. Therefore, although deep sequencing is revealing the genes of ever more insect species, the functional studies predominantly focus on candidate genes previously identified in Drosophila, which is biasing research towards conserved gene functions. RNAi screens in other organisms promise to reduce this bias. Here we present the results of the iBeetle screen, a large-scale, unbiased RNAi screen in the red flour beetle, Tribolium castaneum, which identifies gene functions in embryonic and postembryonic development, physiology and cell biology. The utility of Tribolium as a screening platform is demonstrated by the identification of genes involved in insect epithelial adhesion. This work transcends the restrictions of the candidate gene approach and opens fields of research not accessible in Drosophila.",

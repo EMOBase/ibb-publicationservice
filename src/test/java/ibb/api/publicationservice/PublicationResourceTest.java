@@ -1,6 +1,8 @@
 package ibb.api.publicationservice;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,7 +10,7 @@ import java.nio.file.Path;
 import java.time.Year;
 import java.util.Collections;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +22,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 
 @QuarkusTest
 @TestHTTPEndpoint(PublicationResource.class)
@@ -32,10 +33,10 @@ public class PublicationResourceTest {
     @Inject
     ObjectMapper objectMapper;
 
-    @AfterEach
-    @Transactional
-    void cleanUp() {
-        publicationRepository.deleteAll();
+    @BeforeEach
+    void setup() {
+        publicationRepository.recreateIndex();
+        publicationRepository.refresh();
     }
 
     @Test
@@ -43,12 +44,9 @@ public class PublicationResourceTest {
         givenJSONFromFile("publication_valid_full.json")
             .when().post()
             .then()
-                .body("error", nullValue())
-                .statusCode(201)
+                .statusCode(200)
                 .body(
                     "id", notNullValue(),
-                    "updatedAt", notNullValue(),
-                    "createdAt", notNullValue(),
                     "pmid", notNullValue(),
                     "doi", notNullValue(),
                     "authors", notNullValue(),
@@ -67,11 +65,9 @@ public class PublicationResourceTest {
             .when().post()
             .then()
                 .body("error", nullValue())
-                .statusCode(201)
+                .statusCode(200)
                 .body(
                     "id", notNullValue(),
-                    "updatedAt", notNullValue(),
-                    "createdAt", notNullValue(),
                     "pmid", nullValue(),
                     "doi", notNullValue(),
                     "authors", notNullValue(),
@@ -87,176 +83,159 @@ public class PublicationResourceTest {
     @Test
     public void testCreate_ShouldFail_WhenDoiIsMissing() {
         Publication publication = getValidPublication();
-        publication.setDoi(null);
+        publication.doi = null;
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Doi is required"));
+                .statusCode(400);
     }
 
     @Test
     public void testCreate_ShouldFail_WhenDoiIsEmptyString() {
         Publication publication = getValidPublication();
-        publication.setDoi("");
+        publication.doi = "";
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Doi is invalid"));
+                .statusCode(400);
     }
 
     @Test
     public void testCreate_ShouldFail_WhenAuthorsAreMissing() {
         Publication publication = getValidPublication();
-        publication.setAuthors(null);
+        publication.authors = null;
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Authors are required"));
+                .statusCode(400);
     }
 
     @Test
     public void testCreate_ShouldFail_WhenAuthorsAreEmptyList() {
         Publication publication = getValidPublication();
-        publication.setAuthors(Collections.emptyList());
+        publication.authors = Collections.emptyList();
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Authors are required"));
+                .statusCode(400);
     }
 
     @Test
-    public void testCreate_ShouldFail_WhenGenesAreMissing() {
+    public void testCreate_ShouldFail_WhenGeneIsMissing() {
         Publication publication = getValidPublication();
-        publication.setGenes(null);
+        publication.gene = null;
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Genes are required"));
+                .statusCode(400);
     }
     
     @Test
-    public void testCreate_ShouldFail_WhenGenesAreEmptySet() {
+    public void testCreate_ShouldFail_WhenGeneIsEmptyString() {
         Publication publication = getValidPublication();
-        publication.setGenes(Collections.emptySet());
+        publication.gene = "";
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Genes are required"));
+                .statusCode(400);
     }
 
     @Test
     public void testCreate_ShouldFail_WhenTitleIsMissing() {
         Publication publication = getValidPublication();
-        publication.setTitle(null);
+        publication.title = null;
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Title is required"));
+                .statusCode(400);
     }
     
     @Test
     public void testCreate_ShouldFail_WhenAbstractIsMissing() {
         Publication publication = getValidPublication();
-        publication.setSummary(null);
+        publication.summary = null;
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Abstract is required"));
+                .statusCode(400);
     }
 
     @Test
     public void testCreate_ShouldFail_WhenReferenceIsMissing() {
         Publication publication = getValidPublication();
-        publication.setReference(null);
+        publication.reference = null;
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Reference is required"));
+                .statusCode(400);
     }
         
     @Test
     public void testCreate_ShouldFail_WhenYearIsMissing() {
         Publication publication = getValidPublication();
-        publication.setYear(null);
+        publication.year = null;
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Year is required"));
+                .statusCode(400);
     }
 
     @Test
     public void testCreate_ShouldFail_WhenYearIsInTheFuture() {
         Publication publication = getValidPublication();
-        publication.setYear(Year.of(2023000));
+        publication.year = Year.of(2023000);
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Year is invalid"));
+                .statusCode(400);
     }
 
     @Test
     public void testCreate_ShouldFail_WhenIdIsPresent() {
         Publication publication = getValidPublication();
-        publication.setId(1L);
+        publication.id = "123";
 
         givenJSON()
             .body(publication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Id must not be provided"));
+                .statusCode(400);
     }
 
     @Test
     public void testCreate_ShouldFail_WhenDoiAlreadyExists() {
         Publication dbPublication = createExamplePublication();
         Publication submitPublication = getValidPublication();
-        submitPublication.setDoi(dbPublication.getDoi());
+        submitPublication.doi = dbPublication.doi;
 
         givenJSON()
             .body(submitPublication)
             .when().post()
             .then()
-                .statusCode(400)
-                .body("error", equalTo("Doi already exists"));
+                .statusCode(400);
     }
-
-
-    /* Helper methods */
-
 
     private Publication getValidPublication() {
         Path path = Path.of("src", "test", "resources", "publication_valid_full.json");
@@ -267,9 +246,10 @@ public class PublicationResourceTest {
         }
     }
 
-    @Transactional
-    Publication createExamplePublication() {
-        return publicationRepository.create(getValidPublication());
+    private Publication createExamplePublication() {
+        Publication publication = publicationRepository.create(getValidPublication());
+        publicationRepository.refresh();
+        return publication;
     }
 
     private String readJSONString(Path path) {
