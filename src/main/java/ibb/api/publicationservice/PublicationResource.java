@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jboss.resteasy.reactive.RestPath;
 
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -57,6 +58,7 @@ public class PublicationResource {
     }
 
     @DELETE
+    @Authenticated
     @Path("{id}")
     public void delete(@NotBlank String id) {
         publicationRepository.delete(id);
