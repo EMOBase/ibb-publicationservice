@@ -2,6 +2,7 @@ package ibb.api.publicationservice;
 
 import java.util.List;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.jboss.resteasy.reactive.RestPath;
 
 import io.quarkus.security.Authenticated;
@@ -42,6 +43,7 @@ public class PublicationResource {
     }
 
     @POST
+    @Operation(hidden = true)
     public Publication create(
         @NotNull
         @Valid
@@ -60,6 +62,7 @@ public class PublicationResource {
     @DELETE
     @Authenticated
     @Path("{id}")
+    @Operation(hidden = true)
     public void delete(@NotBlank String id) {
         publicationRepository.delete(id);
     }
